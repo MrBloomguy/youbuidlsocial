@@ -383,26 +383,41 @@ export function PostCard({ post }: PostCardProps) {
     const imageUrl = `https://gateway.pinata.cloud/ipfs/${ipfsHash}`;
     const fallbackUrl = `https://ipfs.io/ipfs/${ipfsHash}`;
 
+    // Generate a low-quality placeholder image
+    const blurDataURL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+P+/HgAEtAI8V7yQCgAAAABJRU5ErkJggg==";
+
     return (
       <div className="mt-2 relative group">
-        <div className="relative w-full h-[300px] md:h-[400px] rounded-lg overflow-hidden">
+        <div className="relative w-full h-[300px] md:h-[400px] rounded-lg overflow-hidden bg-muted/30">
+          {/* Placeholder div that shows immediately */}
+          <div
+            className="absolute inset-0 bg-muted/20 animate-pulse rounded-lg"
+            style={{ backgroundSize: 'cover', backgroundPosition: 'center' }}
+          />
+
           <Image
             src={imageUrl}
             alt="Post attachment"
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="rounded-lg object-cover"
+            className="rounded-lg object-cover transition-opacity duration-300"
+            loading="lazy"
             priority={false}
-            quality={80}
+            quality={60}
             placeholder="blur"
-            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+P+/HgAEtAI8V7yQCgAAAABJRU5ErkJggg=="
-            onError={() => {
-              // This is handled differently with next/image
-              const imgElement = document.querySelector(`[src="${imageUrl}"]`) as HTMLImageElement;
-              if (imgElement) {
+            blurDataURL={blurDataURL}
+            onLoadingComplete={(img) => {
+              // Add a fade-in effect when the image loads
+              img.classList.remove('opacity-0');
+            }}
+            onError={(e) => {
+              // Try the fallback URL if the primary one fails
+              const imgElement = e.currentTarget as HTMLImageElement;
+              if (imgElement && !imgElement.src.includes('ipfs.io')) {
                 imgElement.src = fallbackUrl;
               }
             }}
+            style={{ opacity: 0 }} // Start with opacity 0 for fade-in effect
           />
         </div>
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors rounded-lg" />

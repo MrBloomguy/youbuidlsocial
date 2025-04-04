@@ -14,6 +14,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { registerServiceWorker } from '@/utils/register-sw';
 import Head from 'next/head';
+import { PageTransition } from '@/components/page-transition';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -64,7 +65,9 @@ export default function RootLayout({
                 <NotificationProvider>
                   <AuthProvider>
                     <PointsProvider>
-                      {children}
+                      <PageTransition>
+                        {children}
+                      </PageTransition>
                       <Toaster />
                       <MobileNav />
                     </PointsProvider>

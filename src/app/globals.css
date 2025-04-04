@@ -48,6 +48,39 @@
   }
 }
 
+/* Page transition animations */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-out {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-10px); }
+}
+
+@keyframes slide-in-right {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes slide-out-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
+/* Touch feedback animation */
+@keyframes touch-ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
 /* Add these animations to your global styles */
 .animate-like {
   animation: like-button 0.45s ease-in-out;
@@ -55,6 +88,52 @@
 
 .animate-repost {
   animation: repost-button 0.45s ease-in-out;
+}
+
+/* Page transition utilities */
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out forwards;
+}
+
+.animate-fade-out {
+  animation: fade-out 0.3s ease-in forwards;
+}
+
+.animate-slide-in {
+  animation: slide-in-right 0.3s ease-out forwards;
+}
+
+.animate-slide-out {
+  animation: slide-out-left 0.3s ease-in forwards;
+}
+
+/* Touch feedback */
+.touch-feedback {
+  position: relative;
+  overflow: hidden;
+}
+
+.touch-feedback::after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.3) 10%, transparent 10.01%);
+  background-repeat: no-repeat;
+  background-position: 50%;
+  transform: scale(10, 10);
+  opacity: 0;
+  transition: transform 0.3s, opacity 0.5s;
+}
+
+.touch-feedback:active::after {
+  transform: scale(0, 0);
+  opacity: 0.3;
+  transition: 0s;
 }
 
 .animate-quick-pulse {

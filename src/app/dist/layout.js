@@ -13,23 +13,47 @@ var google_1 = require("next/font/google");
 var privy_provider_1 = require("@/providers/privy-provider");
 var rainbow_kit_provider_1 = require("@/providers/rainbow-kit-provider");
 var react_query_1 = require("@tanstack/react-query");
+var react_1 = require("react");
+var register_sw_1 = require("@/utils/register-sw");
+var page_transition_1 = require("@/components/page-transition");
 var inter = google_1.Inter({
     subsets: ['latin'],
     variable: '--font-sans'
 });
-var queryClient = new react_query_1.QueryClient();
+// Configure the QueryClient with optimized settings
+var queryClient = new react_query_1.QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false,
+            staleTime: 1000 * 60 * 5,
+            cacheTime: 1000 * 60 * 30,
+            retry: 1,
+            suspense: false
+        }
+    }
+});
 function RootLayout(_a) {
     var children = _a.children;
+    // Register service worker for better performance and offline capabilities
+    react_1.useEffect(function () {
+        register_sw_1.registerServiceWorker();
+    }, []);
     return (React.createElement("html", { lang: "en", suppressHydrationWarning: true, className: inter.variable },
+        React.createElement("head", null,
+            React.createElement("link", { rel: "manifest", href: "/manifest.json" }),
+            React.createElement("meta", { name: "theme-color", content: "#000000" }),
+            React.createElement("meta", { name: "apple-mobile-web-app-capable", content: "yes" }),
+            React.createElement("meta", { name: "apple-mobile-web-app-status-bar-style", content: "black" }),
+            React.createElement("link", { rel: "apple-touch-icon", href: "/icon-192.png" })),
         React.createElement("body", null,
             React.createElement(react_query_1.QueryClientProvider, { client: queryClient },
                 React.createElement(rainbow_kit_provider_1.WalletProvider, null,
                     React.createElement(privy_provider_1.PrivyClientProvider, null,
-                        React.createElement(theme_provider_1.ThemeProvider, { defaultTheme: "system", enableSystem: true, disableTransitionOnChange: true },
+                        React.createElement(theme_provider_1.ThemeProvider, { defaultTheme: "system", enableSystem: true, attribute: "class" },
                             React.createElement(notification_provider_1.NotificationProvider, null,
                                 React.createElement(auth_provider_1.AuthProvider, null,
                                     React.createElement(points_provider_1.PointsProvider, null,
-                                        children,
+                                        React.createElement(page_transition_1.PageTransition, null, children),
                                         React.createElement(toaster_1.Toaster, null),
                                         React.createElement(mobile_nav_1.MobileNav, null)))))))))));
 }
