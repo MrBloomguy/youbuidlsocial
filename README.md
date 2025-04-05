@@ -148,7 +148,7 @@ We believe in **free open-source collaboration**, and will continue to build too
 ## 🛡 License
 
 MIT License  
-Built by Givestation contributors and the Optimism Collective.  
+Built by Givestation contributors, powered by Optimism.  
 Forever open-source. Forever for the builders.
 
 ---
