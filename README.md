@@ -1,4 +1,3 @@
-Perfect — thanks for the clarification! Let's make this README **official** and **comprehensive**, showcasing:
 
 - 📡 **Live product** at [`youbuidl.social`](https://youbuidl.social)  
 - 🎯 Built by [**Givestation**](https://givestation.org)
@@ -8,9 +7,6 @@ Perfect — thanks for the clarification! Let's make this README **official** an
 
 ---
 
-Here’s the **final, complete README.md content** for the **YouBuidl** project:
-
-```markdown
 # 🧱 YouBuidl – The Builder-First Social Feed for Public Goods
 
 > "Post what you’re building. Earn support. Build in public. Onchain."
@@ -20,18 +16,27 @@ Built by [**Givestation**](https://givestation.org), and **natively aligned with
 
 ---
 
+
+- 📡 **Live product** at [`youbuidl.social`](https://youbuidl.social)  
+- 🎯 Built by [**Givestation**](https://givestation.org)
+- 🌐 Fully decentralized social layer using **Ceramic** + **Orbis SDK**
+- 🧬 Native to **Optimism**, with funding from **RPGF 2 & 3**, and **Gitcoin Grants**
+- 🎁 Powered by **public goods principles** and open protocols
+
+---
+
 ## 🌀 The Evolution: From Givestation to YouBuidl
 
 ### 🏁 Originally: Givestation
 
-Givestation launched as a platform to **fund public goods**, creators, and builders using milestone-based donations. We introduced onchain project reputation and contributed to shifting attention towards **build-in-public** narratives.
+Givestation launched as a platform in 2021 to **fund public goods**, creators, and builders using milestone-based donations. We introduced onchain project reputation and contributed to shifting attention towards **build-in-public** narratives.
 
 ### ✨ Transition to YouBuidl
 
 As usage grew, we realized:
 > "Builders need support **before** the project is polished."
 
-YouBuidl emerged as a response — giving builders a space to share early ideas, demos, and experiments while earning **social and financial support** directly from the community.
+YouBuidl emerged as a product and response — giving builders a space to share early ideas, demos, and experiments while earning **social and financial support** directly from the community.
 
 ---
 
@@ -90,7 +95,6 @@ Every post can receive donations directly — no approvals or delays.
 ### 🧩 Embed Interactive Demos
 Drop your playable prototypes, NFT widgets, or app experiments directly into your feed using HTML/iFrames.
 
-
 ---
 
 ### 🎯 Earn BuidlPoints
@@ -98,6 +102,8 @@ Each action earns **onchain BuidlPoints** — tracked and rewarded through smart
 
 
 ---
+
+### MORE FEATURES WILL BE ANNOUNCED SOON.
 
 ## 🧪 Local Setup for Developers
 
