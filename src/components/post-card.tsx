@@ -767,6 +767,3 @@ export function PointsLeaderboard() {
     </div>
   );
 }
-
-
-

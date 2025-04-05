@@ -204,5 +204,3 @@ MobileNavComponent.displayName = 'MobileNav';
 
 // Export the optimized component
 export const MobileNav = MobileNavComponent;
-
-
