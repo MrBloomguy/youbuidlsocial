@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     domains: [
-      'gateway.pinata.cloud', 
+      'gateway.pinata.cloud',
       'ipfs.io',
       'peach-giant-elk-508.mypinata.cloud'
     ],
@@ -18,7 +18,6 @@ const nextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
-  swcMinify: true,
   poweredByHeader: false,
   compress: true,
 }

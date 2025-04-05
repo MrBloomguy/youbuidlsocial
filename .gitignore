@@ -20,6 +20,9 @@
 # production
 /build
 
+# compiled files
+**/dist/*.js
+
 # misc
 .DS_Store
 *.pem
