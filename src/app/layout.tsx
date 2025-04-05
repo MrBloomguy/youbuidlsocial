@@ -52,13 +52,16 @@ export default function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning className={inter.variable}>
-      <head>
+      <Head>
         <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" href="/favicon.ico" />
+        <title>YouBuidl</title> {/* Add this line for the app name */}
+        <meta name="description" content="The Builder's Community" /> {/* Add this line for the tagline */}
         <meta name="theme-color" content="#000000" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
-      </head>
+      </Head>
       <body>
         <QueryClientProvider client={queryClient}>
           <WalletProvider>

@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
+  "regions": ["iad1"],
+  "env": {
+    "NEXT_PUBLIC_PINATA_API_KEY": "381adc182d6baea2d2ed",
+    "NEXT_PUBLIC_PINATA_SECRET_KEY": "c6ed142b8482529dc365069c06382605b82be0255d913eb2285a6d0a94e9f442",
+    "NEXT_PUBLIC_POST_REGISTRY_ADDRESS": "0x71053d579ca1e2a80726bcab71419aefa547aada",
+    "NEXT_PUBLIC_DONATION_CONTRACT_ADDRESS": "0x94207105ab27a2b3eebeab7fa0c60ab674c77883",
+    "NEXT_PUBLIC_PRIVY_APP_ID": "cm8ki21cg00q7tcgdnn0emd1t",
+    "NEXT_PUBLIC_POINTS_CONTRACT_ADDRESS": "0xBD2Fff9cCfe49C20229Fd0d79E8bEfA155fE3c43",
+    "NEXT_PUBLIC_FORWARDER_ADDRESS": "0x2dc08100105c1bfDd18200a11c0571b4Ac2E42CA",
+    "NEXT_PUBLIC_RELAYER_URL": "https://youbuidlsocial-relayer.vercel.app",
+    "NEXT_PUBLIC_USE_GASLESS": "true",
+    "NEXT_PUBLIC_ALCHEMY_API_KEY": "qhQA96F2O5tBz61LvCoF-ZM044FxWSKs"
+  }
+}

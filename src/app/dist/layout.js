@@ -15,6 +15,7 @@ var rainbow_kit_provider_1 = require("@/providers/rainbow-kit-provider");
 var react_query_1 = require("@tanstack/react-query");
 var react_1 = require("react");
 var register_sw_1 = require("@/utils/register-sw");
+var head_1 = require("next/head");
 var page_transition_1 = require("@/components/page-transition");
 var orbis_1 = require("@/lib/orbis");
 var inter = google_1.Inter({
@@ -44,8 +45,13 @@ function RootLayout(_a) {
         });
     }, []);
     return (React.createElement("html", { lang: "en", suppressHydrationWarning: true, className: inter.variable },
-        React.createElement("head", null,
+        React.createElement(head_1["default"], null,
             React.createElement("link", { rel: "manifest", href: "/manifest.json" }),
+            React.createElement("link", { rel: "icon", href: "/favicon.ico" }),
+            React.createElement("title", null, "YouBuidl"),
+            " ",
+            React.createElement("meta", { name: "description", content: "The Builder's Community" }),
+            " ",
             React.createElement("meta", { name: "theme-color", content: "#000000" }),
             React.createElement("meta", { name: "apple-mobile-web-app-capable", content: "yes" }),
             React.createElement("meta", { name: "apple-mobile-web-app-status-bar-style", content: "black" }),
