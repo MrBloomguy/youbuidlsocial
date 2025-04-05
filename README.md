@@ -128,7 +128,7 @@ Each action earns **onchain BuidlPoints** — tracked and rewarded through smart
 
 - 🌍 Website: [https://givestation.org](https://givestation.org)
 - 🌐 App: [https://youbuidl.social](https://youbuidl.social)
-- 🐦 Twitter/X: [@givestationxyz](https://twitter.com/givestation)
+- 🐦 Twitter/X: [@givestation](https://twitter.com/givestation)
 - 🌊 Farcaster: [`@givestation`](https://warpcast.com/givestation)
 
 ---
