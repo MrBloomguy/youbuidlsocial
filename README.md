@@ -1,13 +1,4 @@
-
-- 📡 **Live product** at [`youbuidl.social`](https://youbuidl.social)  
-- 🎯 Built by [**Givestation**](https://givestation.org)
-- 🌐 Fully decentralized social layer using **Ceramic** + **Orbis SDK**
-- 🧬 Native to **Optimism**, with funding from **RPGF 2 & 3**, and **Gitcoin Grants**
-- 🎁 Powered by **public goods principles** and open protocols
-
----
-
-# 🧱 YouBuidl – The Builder-First Social Feed for Public Goods
+# 🧱 YouBuidl – The Builders community.
 
 > "Post what you’re building. Earn support. Build in public. Onchain."
 
