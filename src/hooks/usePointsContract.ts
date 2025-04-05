@@ -37,6 +37,14 @@ export function usePointsContract() {
   const fetchUserPoints = useCallback(async (address: string) => {
     try {
       setPointsLoading(true);
+
+      // Validate the user address
+      if (!address || !ethers.isAddress(address)) {
+        console.warn('Invalid user address for points lookup:', address);
+        setPoints(0);
+        return;
+      }
+
       const validatedAddress = validateContractAddress();
       const provider = await getProvider();
 
@@ -46,10 +54,18 @@ export function usePointsContract() {
         provider
       );
 
-      const userPoints = await contract.getUserPoints(address);
-      setPoints(Number(userPoints));
+      try {
+        const userPoints = await contract.getUserPoints(address);
+        setPoints(Number(userPoints));
+      } catch (contractError) {
+        console.error('Contract error fetching user points:', contractError);
+        // Set points to 0 if there's a contract error
+        setPoints(0);
+      }
     } catch (error) {
       console.error('Error fetching user points:', error);
+      // Set points to 0 on error
+      setPoints(0);
     } finally {
       setPointsLoading(false);
     }
@@ -57,15 +73,21 @@ export function usePointsContract() {
 
   // Fetch user points when connected
   useEffect(() => {
-    if (ready && user?.wallet?.address) {
-      fetchUserPoints(user.wallet.address);
-
-      // Set up a refresh interval to keep points updated
-      const intervalId = setInterval(() => {
+    if (ready) {
+      if (user?.wallet?.address) {
         fetchUserPoints(user.wallet.address);
-      }, 30000); // Refresh every 30 seconds
 
-      return () => clearInterval(intervalId);
+        // Set up a refresh interval to keep points updated
+        const intervalId = setInterval(() => {
+          fetchUserPoints(user.wallet.address);
+        }, 30000); // Refresh every 30 seconds
+
+        return () => clearInterval(intervalId);
+      } else {
+        // If user is not connected, set points to 0 and stop loading
+        setPoints(0);
+        setPointsLoading(false);
+      }
     }
   }, [ready, user?.wallet?.address, fetchUserPoints]);
 

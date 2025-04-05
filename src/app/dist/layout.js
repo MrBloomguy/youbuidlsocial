@@ -16,6 +16,7 @@ var react_query_1 = require("@tanstack/react-query");
 var react_1 = require("react");
 var register_sw_1 = require("@/utils/register-sw");
 var page_transition_1 = require("@/components/page-transition");
+var orbis_1 = require("@/lib/orbis");
 var inter = google_1.Inter({
     subsets: ['latin'],
     variable: '--font-sans'
@@ -34,9 +35,13 @@ var queryClient = new react_query_1.QueryClient({
 });
 function RootLayout(_a) {
     var children = _a.children;
-    // Register service worker for better performance and offline capabilities
+    // Register service worker and initialize Orbis
     react_1.useEffect(function () {
         register_sw_1.registerServiceWorker();
+        // Initialize Orbis connection
+        orbis_1.initializeOrbis()["catch"](function (error) {
+            console.error('Failed to initialize Orbis:', error);
+        });
     }, []);
     return (React.createElement("html", { lang: "en", suppressHydrationWarning: true, className: inter.variable },
         React.createElement("head", null,

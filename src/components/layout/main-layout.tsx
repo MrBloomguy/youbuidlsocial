@@ -1,6 +1,6 @@
 'use client';
 
-import React, { memo } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import dynamic from 'next/dynamic';
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -8,7 +8,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 // Dynamically import components to improve initial load time
 const Header = dynamic(() => import("./header").then(mod => ({ default: mod.Header })), { ssr: true });
 const Sidebar = dynamic(() => import("./sidebar").then(mod => ({ default: mod.Sidebar })), { ssr: false });
-const RightSidebar = dynamic(() => import("./right-sidebar").then(mod => ({ default: mod.RightSidebar })), { ssr: false });
+
+// Import RightSidebar directly to avoid chunk loading issues
+import { RightSidebar } from './right-sidebar';
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -19,6 +21,13 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
   children,
   showHeader = true
 }) => {
+  const [mounted, setMounted] = useState(false);
+
+  // Only render client-side components after mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <TooltipProvider>
       <div className="min-h-screen bg-background">
@@ -40,7 +49,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
           {/* Sidebar */}
           <div className="hidden md:block w-64 xl:w-72 shrink-0">
             <div className={`fixed ${showHeader ? 'top-16' : 'top-0'} bottom-0 w-64 xl:w-72 overflow-y-auto border-r border-border py-8 px-4`}>
-              <Sidebar />
+              {mounted && <Sidebar />}
             </div>
           </div>
 
@@ -53,7 +62,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
           <div className="hidden lg:block w-[320px] xl:w-[380px] shrink-0">
             <div className={`fixed ${showHeader ? 'top-16' : 'top-0'} bottom-0 w-[320px] xl:w-[380px] overflow-y-auto hide-scrollbar border-l border-border bg-background`}>
               <div className="pb-16">
-                <RightSidebar />
+                {mounted && <RightSidebar />}
               </div>
             </div>
           </div>

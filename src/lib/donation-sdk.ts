@@ -26,7 +26,7 @@ export class DonationSDK {
 
   constructor(config: DonationSDKConfig) {
     const configuredAddress = process.env.NEXT_PUBLIC_DONATION_CONTRACT_ADDRESS;
-    
+
     if (!configuredAddress) {
       throw new Error('Donation contract address not configured');
     }
@@ -36,12 +36,31 @@ export class DonationSDK {
     }
 
     this.contractAddress = configuredAddress as `0x${string}`;
-    
+
     this.publicClient = createPublicClient({
       chain: optimismSepolia,
       transport: http()
     });
 
+    // Initialize wallet client only if ethereum is available
+    if (typeof window !== 'undefined' && window.ethereum) {
+      this.walletClient = createWalletClient({
+        chain: optimismSepolia,
+        transport: custom(window.ethereum)
+      });
+    } else {
+      // Create a placeholder wallet client that will be initialized later
+      this.walletClient = {} as WalletClient;
+    }
+  }
+
+  // Initialize or re-initialize the wallet client
+  private ensureWalletClient() {
+    if (typeof window === 'undefined' || !window.ethereum) {
+      throw new Error('No ethereum wallet found. Please connect your wallet first.');
+    }
+
+    // Re-initialize wallet client to ensure it's using the current window.ethereum
     this.walletClient = createWalletClient({
       chain: optimismSepolia,
       transport: custom(window.ethereum)
@@ -50,6 +69,9 @@ export class DonationSDK {
 
   // Add error handling and validation
   async donate(params: DonationParams) {
+    // Ensure wallet client is initialized
+    this.ensureWalletClient();
+
     // Validate minimum amount
     const minAmount = '0.001';
     if (parseFloat(params.amount) < parseFloat(minAmount)) {
@@ -63,12 +85,12 @@ export class DonationSDK {
 
     try {
       const [account] = await this.walletClient.requestAddresses();
-      
+
       // Add balance check before donation
       const balance = await this.publicClient.getBalance({
         address: account
       });
-      
+
       const value = parseEther(params.amount);
       if (balance < value) {
         throw new Error('Insufficient balance for donation');
@@ -93,9 +115,9 @@ export class DonationSDK {
         account
       });
 
-      const receipt = await this.publicClient.waitForTransactionReceipt({ 
+      const receipt = await this.publicClient.waitForTransactionReceipt({
         hash,
-        confirmations: 1 
+        confirmations: 1
       });
 
       if (receipt.status === 'reverted') {
@@ -114,9 +136,8 @@ export class DonationSDK {
   }
 
   async withdraw() {
-    if (!window.ethereum) {
-      throw new Error('No ethereum wallet found');
-    }
+    // Ensure wallet client is initialized
+    this.ensureWalletClient();
 
     const [account] = await this.walletClient.requestAddresses();
 

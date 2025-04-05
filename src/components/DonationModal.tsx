@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
-import { useAccount } from 'wagmi';
+import { useAccount, useConnect } from 'wagmi';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Wallet, Star } from 'lucide-react';
 import { DonationSDK } from '@/lib/donation-sdk';
@@ -49,21 +49,52 @@ export function DonationModal({
 }: DonationModalProps) {
   const [amount, setAmount] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [sdkInstance, setSdkInstance] = useState<DonationSDK | null>(null);
   const { address, isConnected } = useAccount();
+  const { connect, connectors } = useConnect();
   const { toast } = useToast();
-  const donationSDK = new DonationSDK({
-    projectId: projectConfig.id,
-    chainId: projectConfig.recipients[0].chainId
-  });
   const MIN_DONATION = '0.0001';
+
+  // Initialize SDK only after component mounts to avoid window.ethereum issues
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const sdk = new DonationSDK({
+          projectId: projectConfig.id,
+          chainId: projectConfig.recipients[0].chainId
+        });
+        setSdkInstance(sdk);
+      } catch (error) {
+        console.error('Failed to initialize DonationSDK:', error);
+      }
+    }
+  }, [projectConfig.id, projectConfig.recipients]);
 
   const DONATION_POINTS = 15; // You can adjust this value or make it dynamic based on amount
 
   const handleDonate = async () => {
     if (!isConnected) {
+      // Try to connect with the first available connector
+      if (connectors.length > 0) {
+        try {
+          connect({ connector: connectors[0] });
+        } catch (error) {
+          console.error('Connection error:', error);
+        }
+      }
+
       toast({
         title: 'Connect Wallet',
         description: 'Please connect your wallet to donate.',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    if (!sdkInstance) {
+      toast({
+        title: 'SDK Not Ready',
+        description: 'Donation service is initializing. Please try again.',
         variant: 'destructive'
       });
       return;
@@ -94,8 +125,8 @@ export function DonationModal({
         streamId,
         recipient: author.address
       });
-      
-      await donationSDK.donate({
+
+      await sdkInstance.donate({
         recipient: author.address,
         amount,
         streamId: streamId.toString(),
@@ -122,7 +153,7 @@ export function DonationModal({
     }
   };
 
-  const displayAddress = author.address && author.address !== '0x' 
+  const displayAddress = author.address && author.address !== '0x'
     ? `${author.address.slice(0, 6)}...${author.address.slice(-4)}`
     : 'Address not available';
 
@@ -142,8 +173,8 @@ export function DonationModal({
               Project: {projectConfig.name}
             </p>
             <div className="mt-2">
-              <Badge 
-                variant="secondary" 
+              <Badge
+                variant="secondary"
                 className="inline-flex items-center gap-1.5 px-3 py-1.5"
               >
                 <Star className="w-4 h-4 text-yellow-500" />
@@ -196,10 +227,10 @@ export function DonationModal({
             ))}
           </div>
 
-          <Button 
+          <Button
             className="w-full h-12 text-base"
-            onClick={handleDonate} 
-            disabled={isProcessing || !isConnected || !author.address || author.address === '0x'}
+            onClick={handleDonate}
+            disabled={isProcessing || (!isConnected && !connectors.length) || !author.address || author.address === '0x' || !sdkInstance}
             style={{
               backgroundColor: projectConfig.theme.primaryColor,
               borderRadius: projectConfig.theme.buttonStyle === 'rounded' ? '9999px' : '0.5rem'
@@ -210,6 +241,8 @@ export function DonationModal({
                 <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                 Processing...
               </>
+            ) : !sdkInstance ? (
+              'Initializing donation service...'
             ) : !author.address || author.address === '0x' ? (
               'Recipient address not available'
             ) : !isConnected ? (

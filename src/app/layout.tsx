@@ -15,6 +15,7 @@ import { useEffect } from 'react';
 import { registerServiceWorker } from '@/utils/register-sw';
 import Head from 'next/head';
 import { PageTransition } from '@/components/page-transition';
+import { initializeOrbis } from '@/lib/orbis';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -39,9 +40,14 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Register service worker for better performance and offline capabilities
+  // Register service worker and initialize Orbis
   useEffect(() => {
     registerServiceWorker();
+
+    // Initialize Orbis connection
+    initializeOrbis().catch(error => {
+      console.error('Failed to initialize Orbis:', error);
+    });
   }, []);
 
   return (
