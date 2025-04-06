@@ -17,6 +17,7 @@ import Head from 'next/head';
 import { PageTransition } from '@/components/page-transition';
 import { initializeOrbis } from '@/lib/orbis';
 
+// Initialize the Inter font
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-sans',
