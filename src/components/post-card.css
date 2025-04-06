@@ -1,7 +1,0 @@
-.verification-optimism {
-  @apply text-green-500 hover:text-green-600;
-}
-
-.verification-ceramic {
-  @apply text-blue-500 hover:text-blue-600;
-}
