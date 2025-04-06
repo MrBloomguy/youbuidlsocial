@@ -1,12 +1,13 @@
 'use client';
 
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "next-themes";
 import { NotificationProvider } from "@/components/notification-provider";
 import { AuthProvider } from "@/providers/auth-provider";
 import { PointsProvider } from "@/providers/points-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { MobileNav } from "@/components/mobile-nav";
+// Import Inter font
 import { Inter } from 'next/font/google';
 import { PrivyClientProvider } from '@/providers/privy-provider';
 import { WalletProvider } from '@/providers/rainbow-kit-provider';
@@ -29,9 +30,8 @@ const queryClient = new QueryClient({
     queries: {
       refetchOnWindowFocus: false, // Don't refetch on window focus
       staleTime: 1000 * 60 * 5, // Data is fresh for 5 minutes
-      cacheTime: 1000 * 60 * 30, // Cache for 30 minutes
+      gcTime: 1000 * 60 * 30, // Cache for 30 minutes (formerly cacheTime)
       retry: 1, // Only retry once
-      suspense: false, // Don't use suspense
     },
   },
 });
@@ -92,37 +92,4 @@ export default function RootLayout({
   );
 }
 
-export function LoginButton() {
-  const { login, logout, authenticated, user, ready } = usePrivy();
-
-  if (!ready) {
-    return null;
-  }
-
-  if (!authenticated) {
-    return (
-      <Button
-        onClick={login}
-        variant="outline"
-        className="rounded-full"
-      >
-        Login
-      </Button>
-    );
-  }
-
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="rounded-full">
-          {user?.email?.address || user?.wallet?.address?.slice(0, 6) + '...' + user?.wallet?.address?.slice(-4)}
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuItem onClick={logout}>
-          Logout
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
+// LoginButton component moved to src/components/login-button.tsx
