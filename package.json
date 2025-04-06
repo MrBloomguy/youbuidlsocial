@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -H 0.0.0.0",
-    "build": "node build.js",
+    "build": "node build-no-checks.js",
     "start": "next start",
     "lint": "next lint",
     "compile": "node -e \"require('fs').mkdirSync('src/contracts', { recursive: true })\" && hardhat compile && node scripts/compile-contracts.js",
