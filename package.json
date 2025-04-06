@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -H 0.0.0.0",
-    "build": "SKIP_TYPECHECK=true SKIP_LINTING=true NEXT_DISABLE_ESLINT=1 NEXT_DISABLE_TYPECHECK=1 next build --no-lint",
+    "build": "node custom-build.js",
     "start": "next start",
     "lint": "next lint",
     "compile": "node -e \"require('fs').mkdirSync('src/contracts', { recursive: true })\" && hardhat compile && node scripts/compile-contracts.js",

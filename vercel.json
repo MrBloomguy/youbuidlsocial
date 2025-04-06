@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "chmod +x vercel-build.sh && ./vercel-build.sh",
+  "buildCommand": "node custom-build.js",
   "installCommand": "npm install recharts",
   "outputDirectory": ".next",
   "framework": "nextjs",
