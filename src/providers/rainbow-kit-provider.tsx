@@ -14,9 +14,12 @@ const config = createConfig({
   }
 });
 
+// Ensure we have a projectId for WalletConnect
+const walletConnectProjectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || 'c4f79cc821d1f3bc3e31e7b296956d38';
+
 const { wallets } = getDefaultWallets({
   appName: 'youBuidl',
-  projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID!,
+  projectId: walletConnectProjectId,
   chains: [optimismSepolia]
 });
 
@@ -26,7 +29,7 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
   return (
     <WagmiConfig config={config}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider chains={[optimismSepolia]} >
+        <RainbowKitProvider chains={[optimismSepolia]} projectId={walletConnectProjectId}>
           {children}
         </RainbowKitProvider>
       </QueryClientProvider>

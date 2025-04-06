@@ -158,9 +158,9 @@ if (fs.existsSync(layoutPath)) {
 
   // Replace the font import with a simple CSS variable
   const modifiedLayoutContent = originalLayoutContent
-    .replace("import { Inter } from 'next/font/google';\n", '')
-    .replace("const inter = Inter({\n  subsets: ['latin'],\n});\n", '')
-    .replace("className={inter.className}", 'className="font-sans"');
+    .replace(/import\s+{\s*Inter\s*}\s*from\s*['|"]next\/font\/google['|"];?\n?/g, '')
+    .replace(/const\s+inter\s*=\s*Inter\(\s*{[\s\S]*?}\s*\);?\n?/g, '')
+    .replace(/className\s*=\s*{\s*inter\.(?:className|variable)\s*}/g, 'className="font-sans"');
 
   fs.writeFileSync(layoutPath, modifiedLayoutContent);
   console.log('Modified layout.tsx to fix font loader issue');
