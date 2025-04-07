@@ -12,6 +12,7 @@ import { Inter } from 'next/font/google';
 import { PrivyClientProvider } from '@/providers/privy-provider';
 import { WalletProvider } from '@/providers/rainbow-kit-provider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ClientOnly } from '@/components/client-only';
 import { useEffect } from 'react';
 import { registerServiceWorker } from '@/utils/register-sw';
 import Head from 'next/head';
@@ -41,14 +42,23 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Register service worker and initialize Orbis
+  // Register service worker and initialize Orbis only on client side
   useEffect(() => {
-    registerServiceWorker();
+    // Register service worker
+    try {
+      registerServiceWorker();
+    } catch (error) {
+      console.error('Failed to register service worker:', error);
+    }
 
     // Initialize Orbis connection
-    initializeOrbis().catch(error => {
-      console.error('Failed to initialize Orbis:', error);
-    });
+    try {
+      initializeOrbis().catch(error => {
+        console.error('Failed to initialize Orbis:', error);
+      });
+    } catch (error) {
+      console.error('Error initializing Orbis:', error);
+    }
   }, []);
 
   return (
@@ -64,29 +74,31 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icon-192.png" />
       </Head>
       <body>
-        <QueryClientProvider client={queryClient}>
-          <WalletProvider>
-            <PrivyClientProvider>
-              <ThemeProvider
-                defaultTheme="system"
-                enableSystem
-                attribute="class"
-              >
-                <NotificationProvider>
-                  <AuthProvider>
-                    <PointsProvider>
-                      <PageTransition>
-                        {children}
-                      </PageTransition>
-                      <Toaster />
-                      <MobileNav />
-                    </PointsProvider>
-                  </AuthProvider>
-                </NotificationProvider>
-              </ThemeProvider>
-            </PrivyClientProvider>
-          </WalletProvider>
-        </QueryClientProvider>
+        <ClientOnly>
+          <QueryClientProvider client={queryClient}>
+            <WalletProvider>
+              <PrivyClientProvider>
+                <ThemeProvider
+                  defaultTheme="system"
+                  enableSystem
+                  attribute="class"
+                >
+                  <NotificationProvider>
+                    <AuthProvider>
+                      <PointsProvider>
+                        <PageTransition>
+                          {children}
+                        </PageTransition>
+                        <Toaster />
+                        <MobileNav />
+                      </PointsProvider>
+                    </AuthProvider>
+                  </NotificationProvider>
+                </ThemeProvider>
+              </PrivyClientProvider>
+            </WalletProvider>
+          </QueryClientProvider>
+        </ClientOnly>
       </body>
     </html>
   );

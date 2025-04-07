@@ -176,6 +176,17 @@ try {
   process.env.SKIP_ESLINT_CHECK = 'true';
   process.env.SKIP_TYPE_CHECK = 'true';
 
+  // Ensure we have the required environment variables for authentication
+  if (!process.env.NEXT_PUBLIC_PRIVY_APP_ID) {
+    process.env.NEXT_PUBLIC_PRIVY_APP_ID = 'cm8ki21cg00q7tcgdnn0emd1t';
+    console.log('Setting fallback NEXT_PUBLIC_PRIVY_APP_ID for build');
+  }
+
+  if (!process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID) {
+    process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID = 'c4f79cc821d1f3bc3e31e7b296956d38';
+    console.log('Setting fallback NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID for build');
+  }
+
   // Run the build command with SWC compiler
   execSync('npx next build --no-lint', {
     stdio: 'inherit',
@@ -187,7 +198,9 @@ try {
       SKIP_TYPE_CHECK: 'true',
       NODE_OPTIONS: '--max-old-space-size=4096',
       NEXT_TELEMETRY_DISABLED: '1',
-      NEXT_FORCE_SWC: '1'
+      NEXT_FORCE_SWC: '1',
+      NEXT_PUBLIC_PRIVY_APP_ID: process.env.NEXT_PUBLIC_PRIVY_APP_ID || 'cm8ki21cg00q7tcgdnn0emd1t',
+      NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || 'c4f79cc821d1f3bc3e31e7b296956d38'
     }
   });
 
