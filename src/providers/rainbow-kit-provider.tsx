@@ -1,7 +1,7 @@
 'use client';
 
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import { createConfig, WagmiProvider } from 'wagmi';
+import { WagmiProvider, createConfig } from 'wagmi';
 import { optimismSepolia } from 'wagmi/chains';
 import { http } from 'viem';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
