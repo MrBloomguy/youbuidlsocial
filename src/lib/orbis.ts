@@ -10,18 +10,55 @@ export const orbis = new Orbis({
 // Initialize Orbis connection
 export const initializeOrbis = async () => {
   try {
-    const res = await orbis.isConnected();
+    // Check if we're in a browser environment
+    if (typeof window === 'undefined') {
+      console.log('Skipping Orbis initialization in server environment');
+      return false;
+    }
 
-    if (!res || !res.status) {
-      console.log('Connecting to Orbis...');
+    // Check if already connected
+    try {
+      const res = await orbis.isConnected();
+      if (res && res.status) {
+        return true;
+      }
+    } catch (connectionError) {
+      console.warn('Error checking Orbis connection:', connectionError);
+      // Continue with connection attempt
+    }
+
+    console.log('Connecting to Orbis...');
+
+    // Try to connect without a provider first (anonymous mode)
+    try {
       const connectRes = await orbis.connect();
+      if (connectRes && connectRes.status) {
+        return true;
+      }
+    } catch (connectError) {
+      console.warn('Failed to connect to Orbis in anonymous mode:', connectError);
+      // Fall through to try with provider if available
+    }
 
-      if (!connectRes.status) {
-        throw new Error('Failed to connect to Orbis');
+    // Try to connect with provider if available
+    if (window.ethereum) {
+      try {
+        const connectRes = await orbis.connect_v2({
+          provider: window.ethereum,
+          chain: 'ethereum'
+        });
+
+        if (connectRes && connectRes.status) {
+          return true;
+        }
+      } catch (providerError) {
+        console.warn('Failed to connect to Orbis with provider:', providerError);
       }
     }
 
-    return true;
+    // If we got here, all connection attempts failed
+    console.error('All Orbis connection attempts failed');
+    return false;
   } catch (error) {
     console.error('Error initializing Orbis:', error);
     return false;
@@ -30,11 +67,28 @@ export const initializeOrbis = async () => {
 
 // Ensure connection before making requests
 export const ensureOrbisConnection = async () => {
-  const res = await orbis.isConnected();
-  if (!res || !res.status) {
-    return initializeOrbis();
+  try {
+    // Skip in non-browser environments
+    if (typeof window === 'undefined') {
+      return false;
+    }
+
+    // Check current connection status
+    try {
+      const res = await orbis.isConnected();
+      if (res && res.status) {
+        return true;
+      }
+    } catch (error) {
+      console.warn('Error checking Orbis connection:', error);
+    }
+
+    // Try to initialize if not connected
+    return await initializeOrbis();
+  } catch (error) {
+    console.error('Error ensuring Orbis connection:', error);
+    return false;
   }
-  return true;
 };
 
 export interface OrbisPost {
