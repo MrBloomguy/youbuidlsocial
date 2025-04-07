@@ -48,11 +48,11 @@ const Hero: React.FC = () => {
         <div className="mt-8 flex items-center gap-4">
           <div className="font-syne text-sm md:text-base space-y-1">
   <p className="flex items-center gap-2">
-    <img src="https://www.svgrepo.com/show/508727/qr-code.svg" alt="QR Icon" className="h-4 w-4" />
+    <img src="/assets/Givestation.png" alt="QR Icon" className="h-7 w-8" />
     Created by GiveStation
   </p>
   <p className="flex items-center gap-2">
-    <img src="youbuidlSocial_landing_/output/assets/OP-Sunny_Emoji-Sparkly_2C-Red-RGB_v01.svg" alt="Lightning Icon" className="h-4 w-4" />
+    <img src="/assets/OP-Sunny_Emoji-Sparkly_2C-Red-RGB_v01.svg" alt="Lightning Icon" className="h-8 w-8" />
     Powered by Public Goods Funding.
   </p>
 </div>
