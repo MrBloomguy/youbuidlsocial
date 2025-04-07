@@ -11,6 +11,7 @@ import { MobileNav } from "@/components/mobile-nav";
 import { Inter } from 'next/font/google';
 import { PrivyClientProvider } from '@/providers/privy-provider';
 import { WalletProvider } from '@/providers/rainbow-kit-provider';
+import { WagmiCompatProvider } from '@/providers/wagmi-provider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ClientOnly } from '@/components/client-only';
 import { useEffect } from 'react';
@@ -75,29 +76,31 @@ export default function RootLayout({
       </Head>
       <body>
         <ClientOnly>
-          <QueryClientProvider client={queryClient}>
-            <WalletProvider>
-              <PrivyClientProvider>
-                <ThemeProvider
-                  defaultTheme="system"
-                  enableSystem
-                  attribute="class"
-                >
-                  <NotificationProvider>
-                    <AuthProvider>
-                      <PointsProvider>
-                        <PageTransition>
-                          {children}
-                        </PageTransition>
-                        <Toaster />
-                        <MobileNav />
-                      </PointsProvider>
-                    </AuthProvider>
-                  </NotificationProvider>
-                </ThemeProvider>
-              </PrivyClientProvider>
-            </WalletProvider>
-          </QueryClientProvider>
+          <WagmiCompatProvider>
+            <QueryClientProvider client={queryClient}>
+              <WalletProvider>
+                <PrivyClientProvider>
+                  <ThemeProvider
+                    defaultTheme="system"
+                    enableSystem
+                    attribute="class"
+                  >
+                    <NotificationProvider>
+                      <AuthProvider>
+                        <PointsProvider>
+                          <PageTransition>
+                            {children}
+                          </PageTransition>
+                          <Toaster />
+                          <MobileNav />
+                        </PointsProvider>
+                      </AuthProvider>
+                    </NotificationProvider>
+                  </ThemeProvider>
+                </PrivyClientProvider>
+              </WalletProvider>
+            </QueryClientProvider>
+          </WagmiCompatProvider>
         </ClientOnly>
       </body>
     </html>
